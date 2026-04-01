@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-// This is the fix: Removed the curly braces to use the Default Import
+// Ensure this path matches your ThemeProvider file location
+import { ThemeProvider } from "@/components/theme-provider"; 
 import AnimatedBackground from "@/components/features/animated-background";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -17,13 +18,21 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    // suppressHydrationWarning is essential for theme switching
+    <html lang="en" suppressHydrationWarning>
       <body className={inter.className}>
-        {/* Usage of the component */}
-        <AnimatedBackground />
-        <main className="relative z-10">
-          {children}
-        </main>
+        <ThemeProvider 
+          attribute="class" 
+          defaultTheme="system" 
+          enableSystem 
+          disableTransitionOnChange
+        >
+          {/* Your background and children stay inside the provider */}
+          <AnimatedBackground />
+          <main className="relative z-10">
+            {children}
+          </main>
+        </ThemeProvider>
       </body>
     </html>
   );
